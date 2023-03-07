@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 const themeColor = Color.fromRGBO(14, 235, 77, 1);
+const lightbg = const Color.fromRGBO(219, 252, 228, 1);
 
 class Palette {
   static const MaterialColor themeColor = MaterialColor(

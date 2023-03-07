@@ -4,6 +4,7 @@ import 'package:sizer/sizer.dart';
 
 import 'constants.dart';
 
+//todo: add internet permissions in android manifest file 
 void main() {
   runApp(const MyApp());
 }
