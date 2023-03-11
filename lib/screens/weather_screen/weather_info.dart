@@ -4,15 +4,15 @@ import 'package:sizer/sizer.dart';
 
 import '../../constants.dart';
 
-class WeatherInfo extends StatefulWidget {
-  const WeatherInfo({super.key, required this.dataValue});
+class WeatherInfoPage extends StatefulWidget {
+  const WeatherInfoPage({super.key, required this.dataValue});
   final String dataValue;
 
   @override
-  State<WeatherInfo> createState() => _WeatherInfoState();
+  State<WeatherInfoPage> createState() => _WeatherInfoPageState();
 }
 
-class _WeatherInfoState extends State<WeatherInfo> {
+class _WeatherInfoPageState extends State<WeatherInfoPage> {
   final String info = "Weather conditions are essential to farmers because they have a direct impact on the growth, development, and yield of crops\nSunny weather: Sunny weather provides the necessary sunlight for photosynthesis and growth in plants, but it can also lead to heat stress and dehydration in crops.\nRainy weather: Rainy weather can provide much-needed moisture for crops, but excessive rainfall can lead to flooding and waterlogged soils, which can damage or kill crops.\nWindy weather: Windy weather can help to reduce humidity levels and prevent the growth of fungal diseases in crops, but strong winds can also damage or uproot crops.\nCloudy weather can reduce evaporation and slow down drying, conserving moisture in the soil and preventing dehydration in plants. However, it can also reduce sunlight, slowing down photosynthesis and delaying ripening in certain crops.\n";
 
   @override
