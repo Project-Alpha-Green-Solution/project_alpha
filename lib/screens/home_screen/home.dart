@@ -15,6 +15,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromRGBO(241, 253, 244, 1),
       appBar: AppBar(
         centerTitle: true,
         elevation: 0,
@@ -28,6 +29,9 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           children: [
             GestureDetector(
+              onTap: () {
+                _settingModalBottomSheet(context);
+              },
               child: Container(
                 margin: EdgeInsets.only(top: 5.h),
                 height: 18.h,
@@ -47,7 +51,6 @@ class _HomePageState extends State<HomePage> {
                         image: const DecorationImage(
                             image: AssetImage('assets/leaf-scan.gif'),
                             fit: BoxFit.fitWidth),
-                        //color: Colors.white,
                       ),
                     ),
                     Container(
@@ -71,11 +74,12 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             GestureDetector(
-              onTap: (){
+              onTap: () {
                 Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const AnalyticsPage()),
-            );
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const AnalyticsPage()),
+                );
               },
               child: Container(
                 margin: EdgeInsets.only(top: 5.h),
@@ -120,11 +124,11 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             GestureDetector(
-              onTap: (){
+              onTap: () {
                 Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const WeatherPage()),
-            );
+                  context,
+                  MaterialPageRoute(builder: (context) => const WeatherPage()),
+                );
               },
               child: Container(
                 margin: EdgeInsets.only(top: 5.h),
@@ -173,4 +177,37 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+}
+
+void _settingModalBottomSheet(context) {
+  showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical( 
+            top: Radius.circular(25.0),
+          ),),
+      builder: (BuildContext bc) {
+        return Wrap(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(top: 3.h),
+              child: ListTile(
+                  leading: const Icon(
+                    Icons.camera_alt,
+                    color: themeColor,
+                  ),
+                  title: const Text('Capture Image'),
+                  onTap: () => {}),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: ListTile(
+                leading: const Icon(Icons.image, color: themeColor),
+                title: const Text('Upload image from your phone'),
+                onTap: () => {},
+              ),
+            ),
+          ],
+        );
+      });
 }
