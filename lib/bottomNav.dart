@@ -7,8 +7,8 @@ import 'package:projectalpha/constants.dart';
 import 'package:projectalpha/screens/analytics_screen/analytics.dart';
 import 'package:projectalpha/screens/controls_screen/controls.dart';
 import 'package:projectalpha/screens/home_screen/home.dart';
-import 'package:projectalpha/screens/profile_screen/profile.dart';
 import 'package:projectalpha/screens/weather_screen/weather.dart';
+import 'package:projectalpha/screens/settings_screen/settings.dart';
 import 'package:sizer/sizer.dart';
 
 class BottomNav extends StatefulWidget {
@@ -37,7 +37,7 @@ class _BottomNavState extends State<BottomNav> {
       const ControlsPage(),
       const WeatherPage(),
       const AnalyticsPage(),
-      const ProfilePage()
+      const SettingsPage()
     ];
   }
 
@@ -72,9 +72,9 @@ class _BottomNavState extends State<BottomNav> {
         inactiveColorPrimary: CupertinoColors.systemGrey,
       ),
       PersistentBottomNavBarItem(
-        icon: const Icon(Icons.person),
-        inactiveIcon: const Icon(Icons.person),
-        title: ("Profile"),
+        icon: const Icon(Icons.settings),
+        inactiveIcon: const Icon(Icons.settings),
+        title: ("Settings"),
         activeColorPrimary: themeColor,
         inactiveColorPrimary: CupertinoColors.systemGrey,
       ),
