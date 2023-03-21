@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../constants.dart';
@@ -27,7 +28,7 @@ class _ControlsPageState extends State<ControlsPage> {
 
   // This member variable will be used for tracking
   // the Bluetooth device connection state
-  late int _deviceState;
+  int _deviceState = 0;
 
   @override
   void initState() {
@@ -58,6 +59,83 @@ class _ControlsPageState extends State<ControlsPage> {
         getPairedDevices();
       });
     });
+  }
+
+  void _connect() async {
+    if (_device == null) {
+      Fluttertoast.showToast(
+          msg: "No device selected",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    } else {
+      // Making sure the device is not connected
+      if (!isConnected) {
+        // Trying to connect to the device using
+        // its address
+        await BluetoothConnection.toAddress(_device?.address)
+            .then((_connection) {
+          print('Connected to the device');
+          connection = _connection;
+
+          // Updating the device connectivity
+          // status to [true]
+          setState(() {
+            _connected = true;
+          });
+
+          // This is for tracking when the disconnecting process
+          // is in progress which uses the [isDisconnecting] variable
+          // defined before.
+          // Whenever we make a disconnection call, this [onDone]
+          // method is fired.
+          connection.input?.listen(null).onDone(() {
+            if (isDisconnecting) {
+              print('Disconnecting locally!');
+            } else {
+              print('Disconnected remotely!');
+            }
+            if (this.mounted) {
+              setState(() {});
+            }
+          });
+        }).catchError((error) {
+          print('Cannot connect, exception occurred');
+          print(error);
+        });
+        Fluttertoast.showToast(
+            msg: "Device connected",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            backgroundColor: themeColor,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      }
+    }
+  }
+
+  void _disconnect() async {
+    // Closing the Bluetooth connection
+    await connection.close();
+    Fluttertoast.showToast(
+        msg: "Device disconnected",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.black,
+        textColor: Colors.white,
+        fontSize: 16.0);
+
+    // Update the [_connected] variable
+    if (!connection.isConnected) {
+      setState(() {
+        _connected = false;
+      });
+    }
   }
 
 //todo i changed this to Future<bool> from Future<void>
@@ -106,7 +184,7 @@ class _ControlsPageState extends State<ControlsPage> {
 // Define a member variable to track
 // when the disconnection is in progress
   bool isDisconnecting = false;
-  late bool _isButtonUnavailable;
+  bool _isButtonUnavailable = true;
 
   @override
   void dispose() {
@@ -122,6 +200,27 @@ class _ControlsPageState extends State<ControlsPage> {
 // Define this member variable for storing
 // the current device connectivity status
   bool _connected = false;
+
+  // Define this member variable for storing
+// each device from the dropdown items
+  BluetoothDevice? _device;
+
+  List<DropdownMenuItem<BluetoothDevice>> _getDeviceItems() {
+    List<DropdownMenuItem<BluetoothDevice>> items = [];
+    if (_devicesList.isEmpty) {
+      items.add(const DropdownMenuItem(
+        child: Text('NONE'),
+      ));
+    } else {
+      for (var device in _devicesList) {
+        items.add(DropdownMenuItem(
+          value: device,
+          child: Text(device.name!),
+        ));
+      }
+    }
+    return items;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -187,18 +286,86 @@ class _ControlsPageState extends State<ControlsPage> {
 
                       // Disconnect from any device before
                       // turning off Bluetooth
-                      // if (_connected) {
-                      //   _disconnect();
-                      // }
+                      if (_connected) {
+                        _disconnect();
+                      }
                     }
 
                     future().then((_) {
                       setState(() {});
                     });
                   },
-                )
+                ),
               ],
             ),
+          ),
+          Container(
+            margin: EdgeInsets.only(left: 5.w, top: 2.h, right: 5.w),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Device: ',
+                  style: TextStyle(
+                      fontSize: 15.sp,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold),
+                ),
+                DropdownButton(
+                  items: _getDeviceItems(),
+                  onChanged: (value) => setState(() => _device = value!),
+                  value: _devicesList.isNotEmpty ? _device : null,
+                ),
+                ElevatedButton(
+                    onPressed: _isButtonUnavailable
+                        ? null
+                        : _connected
+                            ? _disconnect
+                            : _connect,
+                    style: ElevatedButton.styleFrom(
+                        shape: const StadiumBorder(),
+                        backgroundColor: themeColor),
+                    child: Text(
+                      _connected ? 'Disconnect' : 'Connect',
+                      style: const TextStyle(color: Colors.white),
+                    ))
+              ],
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 3.h),
+            width: 90.w,
+            height: 13.h,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20.sp), color: lightbg),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                "Please if you can't your device in the list go to your phone's settings and pair the device. Then come back to the app to proceed.",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 15.sp,
+                    color: themeColor,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+          Container(
+            width: 90.w,
+            height: 6.h,
+            margin: EdgeInsets.only(top: 3.h),
+            child: ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: themeColor,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10))
+                    )
+                    ),
+                child: Text(
+                  'Go to controls',
+                  style: TextStyle(color: Colors.white, fontSize: 16.sp),
+                )),
           )
         ],
       )),
