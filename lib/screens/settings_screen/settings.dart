@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projectalpha/screens/settings_screen/robot_manual.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../constants.dart';
@@ -63,6 +64,12 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
             ),
             ListTile(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ManualPage()),
+                );
+              },
               leading: Icon(Icons.menu_sharp, size: 30.sp, color: themeColor),
               title: Text(
                       'Robot Manual',

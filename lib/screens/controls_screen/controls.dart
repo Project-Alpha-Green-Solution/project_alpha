@@ -335,13 +335,13 @@ class _ControlsPageState extends State<ControlsPage> {
           Container(
             margin: EdgeInsets.only(top: 3.h),
             width: 90.w,
-            height: 13.h,
+            height: 14.h,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20.sp), color: lightbg),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                "Please if you can't your device in the list go to your phone's settings and pair the device. Then come back to the app to proceed.",
+                "Please if you can't find your device in the list, go to your phone's settings and pair the device. Then come back to the app to proceed.",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontSize: 15.sp,
