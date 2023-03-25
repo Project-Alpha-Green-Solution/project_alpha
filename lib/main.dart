@@ -1,12 +1,23 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:projectalpha/bottomNav.dart';
 import 'package:sizer/sizer.dart';
 
 import 'constants.dart';
 
 //todo: add internet permissions in android manifest file 
-void main() {
-  runApp(const MyApp());
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  if (Platform.isAndroid) {
+    await AndroidInAppWebViewController.setWebContentsDebuggingEnabled(true);
+  }
+
+  runApp(MaterialApp(
+      home: new MyApp()
+  ));
 }
 
 class MyApp extends StatelessWidget {
