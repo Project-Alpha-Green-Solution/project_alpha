@@ -2,18 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:projectalpha/screens/controls_screen/controls_page.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../constants.dart';
 
-class ControlsPage extends StatefulWidget {
-  const ControlsPage({super.key});
+class Controls extends StatefulWidget {
+  const Controls({super.key});
 
   @override
-  State<ControlsPage> createState() => _ControlsPageState();
+  State<Controls> createState() => _ControlsState();
 }
 
-class _ControlsPageState extends State<ControlsPage> {
+class _ControlsState extends State<Controls> {
 // Initializing the Bluetooth connection state to be unknown
   BluetoothState _bluetoothState = BluetoothState.UNKNOWN;
 
@@ -355,7 +356,12 @@ class _ControlsPageState extends State<ControlsPage> {
             height: 6.h,
             margin: EdgeInsets.only(top: 3.h),
             child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ControlsPage()),
+                );
+                },
                 style: ElevatedButton.styleFrom(
                     backgroundColor: themeColor,
                     shape: const RoundedRectangleBorder(

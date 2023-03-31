@@ -34,7 +34,7 @@ class _BottomNavState extends State<BottomNav> {
   List<Widget> _buildScreens() {
     return [
       const HomePage(),
-      const ControlsPage(),
+      const Controls(),
       const WeatherPage(),
       const AnalyticsPage(),
       const SettingsPage()
