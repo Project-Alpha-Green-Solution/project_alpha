@@ -58,7 +58,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                       Text(
                         'Recent Analysis',
                         style: TextStyle(
-                            fontSize: 17.sp,
+                            fontSize: 16.sp,
                             color: themeColor,
                             fontWeight: FontWeight.bold),
                       ),
@@ -67,7 +67,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                         color: themeColor,
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(5.0),
                         child: Row(
                           children: [
                             const Icon(Icons.circle, color: Colors.red, size: 15,),
@@ -75,7 +75,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                           ' Disease Status: ',
                           textAlign: TextAlign.left,
                           style: TextStyle(
-                              fontSize: 15.sp,
+                              fontSize: 13.sp,
                               color: Colors.black,
                               fontWeight: FontWeight.bold),
                         ),
@@ -83,14 +83,14 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                           'None',
                           textAlign: TextAlign.left,
                           style: TextStyle(
-                              fontSize: 15.sp,
+                              fontSize: 13.sp,
                               color: Colors.black,),
                         ),
                           ],
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(5.0),
                         child: Row(
                           children: [
                             const Icon(Icons.circle, color: Colors.brown, size: 15,),
@@ -98,7 +98,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                           ' Soil Nutrient: ',
                           textAlign: TextAlign.left,
                           style: TextStyle(
-                              fontSize: 15.sp,
+                              fontSize: 13.sp,
                               color: Colors.black,
                               fontWeight: FontWeight.bold),
                         ),
@@ -106,14 +106,14 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                           'Healthy',
                           textAlign: TextAlign.left,
                           style: TextStyle(
-                              fontSize: 15.sp,
+                              fontSize: 13.sp,
                               color: Colors.black,),
                         ),
                           ],
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(5.0),
                         child: Row(
                           children: [
                             const Icon(Icons.circle, color: Colors.blue, size: 15,),
@@ -121,7 +121,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                           ' Soil Moisture: ',
                           textAlign: TextAlign.left,
                           style: TextStyle(
-                              fontSize: 15.sp,
+                              fontSize: 13.sp,
                               color: Colors.black,
                               fontWeight: FontWeight.bold),
                         ),
@@ -129,7 +129,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                           'Normal',
                           textAlign: TextAlign.left,
                           style: TextStyle(
-                              fontSize: 15.sp,
+                              fontSize: 13.sp,
                               color: Colors.black,),
                         ),
                           ],
@@ -166,7 +166,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                       Text(
                         'Historical Analysis',
                         style: TextStyle(
-                            fontSize: 17.sp,
+                            fontSize: 16.sp,
                             color: themeColor,
                             fontWeight: FontWeight.bold
                             ),
@@ -176,7 +176,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                         color: themeColor,
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(5.0),
                         child: Row(
                           children: [
                             const Icon(Icons.circle, color: Colors.red, size: 15,),
@@ -184,7 +184,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                           ' Disease Status ',
                           textAlign: TextAlign.left,
                           style: TextStyle(
-                              fontSize: 15.sp,
+                              fontSize: 13.sp,
                               color: Colors.black,
                               ),
                         ),
@@ -192,7 +192,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(5.0),
                         child: Row(
                           children: [
                             const Icon(Icons.circle, color: Colors.brown, size: 15,),
@@ -200,7 +200,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                           ' Soil Nutrient ',
                           textAlign: TextAlign.left,
                           style: TextStyle(
-                              fontSize: 15.sp,
+                              fontSize: 13.sp,
                               color: Colors.black,
                               ),
                         ),
@@ -208,7 +208,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(5.0),
                         child: Row(
                           children: [
                             const Icon(Icons.circle, color: Colors.blue, size: 15,),
@@ -216,7 +216,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                           ' Soil Moisture ',
                           textAlign: TextAlign.left,
                           style: TextStyle(
-                              fontSize: 15.sp,
+                              fontSize: 13.sp,
                               color: Colors.black,
                               ),
                         ),
@@ -251,12 +251,15 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                   ),
                   child: Column(
                     children: [
-                      Text(
-                        'A.I Generated Report',
-                        style: TextStyle(
-                            fontSize: 17.sp,
-                            color: themeColor,
-                            fontWeight: FontWeight.bold),
+                      Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: Text(
+                          'A.I Generated Report',
+                          style: TextStyle(
+                              fontSize: 16.sp,
+                              color: themeColor,
+                              fontWeight: FontWeight.bold),
+                        ),
                       ),
                       const Divider(
                         thickness: 1.5,
@@ -264,9 +267,9 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                       ),
                       Text(
                         'Get A.I generated report of your farm. This report covers deep analysis made with the data collected from your farm. With a backend support from ChatGPT, this report also comes with effective measures you can take to boost crop yield.',
-                        textAlign: TextAlign.center,
+                        textAlign: TextAlign.left,
                         style: TextStyle(
-                            fontSize: 12.5.sp,
+                            fontSize: 10.3.sp,
                             color: Colors.black,),
                       ),
                     ],
@@ -300,7 +303,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                       Text(
                         'Visual Analysis',
                         style: TextStyle(
-                            fontSize: 17.sp,
+                            fontSize: 16.sp,
                             color: themeColor,
                             fontWeight: FontWeight.bold),
                       ),

@@ -62,7 +62,7 @@ class _HomePageState extends State<HomePage> {
                           Text(
                             'Scan leaf',
                             style: TextStyle(
-                                fontSize: 18.sp,
+                                fontSize: 16.5.sp,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white),
                           ),
@@ -112,7 +112,7 @@ class _HomePageState extends State<HomePage> {
                           Text(
                             'Farm Analytics',
                             style: TextStyle(
-                                fontSize: 18.sp,
+                                fontSize: 16.5.sp,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white),
                           ),
@@ -161,7 +161,7 @@ class _HomePageState extends State<HomePage> {
                           Text(
                             'Weather Report',
                             style: TextStyle(
-                                fontSize: 18.sp,
+                                fontSize: 16.sp,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white),
                           ),

@@ -106,7 +106,7 @@ class MainWidget extends StatelessWidget {
           child: Text(
             'Additional Info',
             style: TextStyle(
-                fontSize: 17.sp,
+                fontSize: 16.sp,
                 fontWeight: FontWeight.w500,
                 color: themeColor),
           ),
@@ -129,11 +129,11 @@ class MainWidget extends StatelessWidget {
                 ),
                 title: Text(
                   'Temperature',
-                  style: TextStyle(fontSize: 18.sp),
+                  style: TextStyle(fontSize: 16.sp),
                 ),
                 trailing: Text(
                   temp != null ? '${temp.toInt().toString()}\u00B0' : 'loading',
-                  style: TextStyle(fontSize: 18.sp),
+                  style: TextStyle(fontSize: 16.sp),
                 ),
               ),
               ListTile(
@@ -150,11 +150,11 @@ class MainWidget extends StatelessWidget {
                 ),
                 title: Text(
                   'Weather',
-                  style: TextStyle(fontSize: 18.sp),
+                  style: TextStyle(fontSize: 16.sp),
                 ),
                 trailing: Text(
                   currently != null ? currently.toString() : 'loading',
-                  style: TextStyle(fontSize: 18.sp),
+                  style: TextStyle(fontSize: 16.sp),
                 ),
               ),
               ListTile(
@@ -171,11 +171,11 @@ class MainWidget extends StatelessWidget {
                 ),
                 title: Text(
                   'Humidity',
-                  style: TextStyle(fontSize: 18.sp),
+                  style: TextStyle(fontSize: 16.sp),
                 ),
                 trailing: Text(
                   humidity != null ? '${humidity.toString()} %' : 'loading',
-                  style: TextStyle(fontSize: 18.sp),
+                  style: TextStyle(fontSize: 16.sp),
                 ),
               ),
               ListTile(
@@ -192,11 +192,11 @@ class MainWidget extends StatelessWidget {
                 ),
                 title: Text(
                   'Wind Speed',
-                  style: TextStyle(fontSize: 18.sp),
+                  style: TextStyle(fontSize: 16.sp),
                 ),
                 trailing: Text(
                   windSpeed != null ? '${windSpeed.toString()} mph' : 'loading',
-                  style: TextStyle(fontSize: 18.sp),
+                  style: TextStyle(fontSize: 16.sp),
                 ),
               )
             ],
