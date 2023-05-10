@@ -72,7 +72,7 @@ class _ManualPageState extends State<ManualPage> {
         elevation: 0,
         title: Text(
           'Manual',
-          style: TextStyle(fontSize: 17.sp, color: themeColor),
+          style: TextStyle(fontSize: 16.sp, color: themeColor),
         ),
       ),
       body: Center(
@@ -82,7 +82,7 @@ class _ManualPageState extends State<ManualPage> {
               child: Text(
                 '3D Model Of Robot',
                 style: TextStyle(
-                    fontSize: 15.sp,
+                    fontSize: 14.sp,
                     color: Colors.black,
                     fontWeight: FontWeight.bold),
               ),
@@ -247,12 +247,12 @@ class _ManualPageState extends State<ManualPage> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(5,40,5,0),
+                            padding: const EdgeInsets.fromLTRB(5,35,5,0),
                             child: Text(
                               '${steps[index]}',
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                  fontSize: 15.sp,
+                                  fontSize: 13.sp,
                                   color: themeColor,
                                   fontWeight: FontWeight.bold),
                             ),
@@ -265,11 +265,11 @@ class _ManualPageState extends State<ManualPage> {
                       left: 5.w,
                       child: CircleAvatar(
                         backgroundColor: themeColor,
-                        radius: 12.sp,
+                        radius: 11.sp,
                         child: Text(
                           '${index + 1}',
                           style: TextStyle(
-                              fontSize: 17.sp,
+                              fontSize: 15.sp,
                               color: Colors.white,
                               fontWeight: FontWeight.bold),
                         ),
