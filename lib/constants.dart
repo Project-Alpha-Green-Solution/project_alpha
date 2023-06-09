@@ -20,3 +20,8 @@ class Palette {
     },
   );
 }
+
+const MONGO_URL = "mongodb+srv://eyarko:%40password123@lawsonscluster.l1vqepq.mongodb.net/agroguard";
+
+const COLLECTION_NAME = "agroguard";
+

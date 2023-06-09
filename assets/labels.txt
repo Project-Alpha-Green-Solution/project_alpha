@@ -1,0 +1,14 @@
+Tomato_Early_Blight
+Tomato_Late_Blight
+Tomato_Mosaic_Virus
+Tomato_Yellow_Leaf_Curl
+Healthy_Tomato
+Potato_Early_Blight
+Healthy_Potato
+Potato_Late_Blight
+Bell_Pepper_Bacterial_Spot
+Healthy_Bell_Pepper
+Maize_Cercospora_leaf_spot _and_Gray_leaf_spot
+Maize_Common_rust
+Healthy_Maize
+Apple_Scab

@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:hive/hive.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:projectalpha/constants.dart';
 import 'package:projectalpha/screens/analytics_screen/analytics.dart';
+import 'package:projectalpha/screens/home_screen/disease.dart';
 import 'package:projectalpha/screens/weather_screen/weather.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -14,6 +21,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: const Color.fromRGBO(241, 253, 244, 1),
       appBar: AppBar(
@@ -30,7 +38,11 @@ class _HomePageState extends State<HomePage> {
           children: [
             GestureDetector(
               onTap: () {
-                _settingModalBottomSheet(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => Disease()),
+                );
               },
               child: Container(
                 margin: EdgeInsets.only(top: 5.h),
@@ -177,37 +189,4 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-}
-
-void _settingModalBottomSheet(context) {
-  showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical( 
-            top: Radius.circular(25.0),
-          ),),
-      builder: (BuildContext bc) {
-        return Wrap(
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(top: 3.h),
-              child: ListTile(
-                  leading: const Icon(
-                    Icons.camera_alt,
-                    color: themeColor,
-                  ),
-                  title: const Text('Capture Image'),
-                  onTap: () => {}),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
-              child: ListTile(
-                leading: const Icon(Icons.image, color: themeColor),
-                title: const Text('Upload image from your phone'),
-                onTap: () => {},
-              ),
-            ),
-          ],
-        );
-      });
 }
