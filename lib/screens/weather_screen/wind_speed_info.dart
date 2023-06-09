@@ -53,14 +53,14 @@ class _WindSpeedInfoState extends State<WindSpeedInfo> {
                       padding: EdgeInsets.only(left: 3.w),
                       child: Text(
                         'Wind speed reading: ',
-                        style: TextStyle(fontSize: 18.sp, color: Colors.white),
+                        style: TextStyle(fontSize: 16.sp, color: Colors.white),
                       ),
                     ),
                     Padding(
                       padding: EdgeInsets.only(left: 3.5.w),
                       child: Text(
                         widget.dataValue,
-                        style: TextStyle(fontSize: 18.sp, color: Colors.white),
+                        style: TextStyle(fontSize: 16.sp, color: Colors.white),
                       ),
                     ),
                   ],
@@ -71,7 +71,7 @@ class _WindSpeedInfoState extends State<WindSpeedInfo> {
                 width: 90.w,
                 child: Text(
                   info,
-                  style: TextStyle(fontSize: 15.sp, color: Colors.black),
+                  style: TextStyle(fontSize: 13.5.sp, color: Colors.black),
                 ),
               )
             ],

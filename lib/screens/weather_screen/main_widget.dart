@@ -2,16 +2,18 @@
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:projectalpha/mongo_schema/schema.dart';
+import 'package:projectalpha/mongodb.dart';
 import 'package:projectalpha/screens/weather_screen/temperature_info.dart';
 import 'package:projectalpha/screens/weather_screen/weather.dart';
 import 'package:projectalpha/screens/weather_screen/weather_info.dart';
 import 'package:projectalpha/screens/weather_screen/wind_speed_info.dart';
 import 'package:sizer/sizer.dart';
-
 import '../../constants.dart';
 import 'humidity_info.dart';
+import 'package:mongo_dart/mongo_dart.dart' as M;
 
-class MainWidget extends StatelessWidget {
+class MainWidget extends StatefulWidget {
   final temp;
   final description;
   final currently;
@@ -27,6 +29,20 @@ class MainWidget extends StatelessWidget {
       @required this.humidity,
       @required this.windSpeed,
       @required this.location});
+
+  @override
+  State<MainWidget> createState() => _MainWidgetState();
+}
+
+class _MainWidgetState extends State<MainWidget> {
+  @override
+  void initState() {
+    super.initState();
+    updateFarmerData(
+        widget.temp, widget.currently, widget.humidity, widget.windSpeed);
+    // insertWeatherData(
+    //     widget.temp, widget.currently, widget.humidity, widget.windSpeed);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +89,7 @@ class MainWidget extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.only(top: 8.0, right: 6.0),
                           child: Text(
-                            '$location',
+                            '${widget.location}',
                             overflow: TextOverflow.ellipsis,
                             softWrap: false,
                             maxLines: 1,
@@ -86,8 +102,8 @@ class MainWidget extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.only(top: 10.0, right: 1.0),
                           child: Text(
-                            temp != null
-                                ? '${temp.toInt().toString()}\u00B0'
+                            widget.temp != null
+                                ? '${widget.temp.toInt().toString()}\u00B0'
                                 : 'loading',
                             style: TextStyle(
                                 fontSize: 25.sp,
@@ -119,7 +135,7 @@ class MainWidget extends StatelessWidget {
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => TemperatureInfo(
-                            dataValue: temp.toString(),
+                            dataValue: widget.temp.toString(),
                           )));
                 },
                 leading: FaIcon(
@@ -132,7 +148,9 @@ class MainWidget extends StatelessWidget {
                   style: TextStyle(fontSize: 16.sp),
                 ),
                 trailing: Text(
-                  temp != null ? '${temp.toInt().toString()}\u00B0' : 'loading',
+                  widget.temp != null
+                      ? '${widget.temp.toInt().toString()}\u00B0'
+                      : 'loading',
                   style: TextStyle(fontSize: 16.sp),
                 ),
               ),
@@ -140,7 +158,7 @@ class MainWidget extends StatelessWidget {
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => WeatherInfoPage(
-                            dataValue: currently.toString(),
+                            dataValue: widget.currently.toString(),
                           )));
                 },
                 leading: FaIcon(
@@ -153,7 +171,9 @@ class MainWidget extends StatelessWidget {
                   style: TextStyle(fontSize: 16.sp),
                 ),
                 trailing: Text(
-                  currently != null ? currently.toString() : 'loading',
+                  widget.currently != null
+                      ? widget.currently.toString()
+                      : 'loading',
                   style: TextStyle(fontSize: 16.sp),
                 ),
               ),
@@ -161,7 +181,7 @@ class MainWidget extends StatelessWidget {
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => HumidityInfo(
-                            dataValue: humidity.toString(),
+                            dataValue: widget.humidity.toString(),
                           )));
                 },
                 leading: FaIcon(
@@ -174,15 +194,17 @@ class MainWidget extends StatelessWidget {
                   style: TextStyle(fontSize: 16.sp),
                 ),
                 trailing: Text(
-                  humidity != null ? '${humidity.toString()} %' : 'loading',
+                  widget.humidity != null
+                      ? '${widget.humidity.toString()} %'
+                      : 'loading',
                   style: TextStyle(fontSize: 16.sp),
                 ),
               ),
               ListTile(
-                onTap: () {
+                onTap: () async {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => WindSpeedInfo(
-                            dataValue: windSpeed.toString(),
+                            dataValue: widget.windSpeed.toString(),
                           )));
                 },
                 leading: FaIcon(
@@ -195,7 +217,9 @@ class MainWidget extends StatelessWidget {
                   style: TextStyle(fontSize: 16.sp),
                 ),
                 trailing: Text(
-                  windSpeed != null ? '${windSpeed.toString()} mph' : 'loading',
+                  widget.windSpeed != null
+                      ? '${widget.windSpeed.toString()} mph'
+                      : 'loading',
                   style: TextStyle(fontSize: 16.sp),
                 ),
               )
@@ -213,12 +237,16 @@ class MainWidget extends StatelessWidget {
                 ),
                 backgroundColor: themeColor,
               ),
-              onPressed: () {
+              onPressed: () async {
                 fetchWeather();
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                         builder: (context) => const WeatherPage()));
+                updateFarmerData(widget.temp, widget.currently, widget.humidity,
+                    widget.windSpeed);
+                // insertWeatherData(widget.temp, widget.currently,
+                //     widget.humidity, widget.windSpeed);
               },
               child: Text(
                 'Refresh',
@@ -232,4 +260,44 @@ class MainWidget extends StatelessWidget {
       ],
     ));
   }
+
+  Future<void> insertWeatherData(
+      var myTemp, var myCurrently, var myHumidity, var myWindSpeed) async {
+    var _id = 'weatherData';
+    final data = Weather(
+        id: _id,
+        temperature: myTemp,
+        weather: myCurrently,
+        humidity: myHumidity,
+        windSpeed: myWindSpeed);
+
+    var result = await MongoDatabase.insertWeatherData(data);
+  }
+
+  Future<void> updateFarmerData(
+      var myTemp, var myCurrently, var myHumidity, var myWindSpeed) async {
+    final weatherID = 'weatherID';
+    final updateData = Weather(
+      id: weatherID,
+      temperature: myTemp,
+      weather: myCurrently,
+      humidity: myHumidity,
+      windSpeed: myWindSpeed,
+    );
+
+    await MongoDatabase.updateWeatherData(updateData);
+  }
+
+  // Future<void> insertFarmerData(
+  //     var myTemp, var myCurrently, var myHumidity, var myWindSpeed) async {
+  //   var _id = M.ObjectId();
+  //   final data = Weather(
+  //       id: _id,
+  //       temperature: myTemp,
+  //       weather: myCurrently,
+  //       humidity: myHumidity,
+  //       windSpeed: myWindSpeed);
+
+  //   var result = await MongoDatabase.insertWeatherData(data);
+  // }
 }
