@@ -17,10 +17,11 @@ class _HistoricalAnalysisState extends State<HistoricalAnalysis> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
         centerTitle: true,
         elevation: 0,
         title: Text(
-          'Historical Analysis',
+          'Past Analysis',
           style: TextStyle(fontSize: 17.sp, color: themeColor),
         ),
       ),

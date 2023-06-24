@@ -2,13 +2,20 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:projectalpha/mongo_schema/schema.dart';
 import 'package:sizer/sizer.dart';
 import '../../constants.dart';
+import '../../mongodb.dart';
+import '../../send_email.dart';
 import '../auth_screens/utils.dart';
 import '../pdf/pdf_gen.dart';
 import 'cure.dart';
 import 'package:tflite/tflite.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mongo_dart/mongo_dart.dart' as M;
+import 'package:firebase_auth/firebase_auth.dart';
+
+final user = FirebaseAuth.instance.currentUser!;
 
 class Disease extends StatefulWidget {
   const Disease({super.key});
@@ -34,18 +41,53 @@ class _DiseaseState extends State<Disease> {
               child: ListBody(
                 children: <Widget>[
                   GestureDetector(
-                    child: Text("Gallery "),
+                    child: Text("Pick image from gallery "),
                     onTap: () {
                       predictImagePickerGallery(context);
                     },
                   ),
                   Padding(
-                    padding: EdgeInsets.all(8.0),
+                    padding: EdgeInsets.all(5.0),
                   ),
                   GestureDetector(
-                    child: Text("Camera "),
+                    child: Text("Take a picture "),
                     onTap: () {
                       predictImagePickerCamera(context);
+                    },
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(5.0),
+                  ),
+                  GestureDetector(
+                    child: Text("Generate PDF Report"),
+                    onTap: () async {
+                      setState(() {
+                        isLoading = true;
+                      });
+                      bool result = await makeReport(
+                        plant: cropName,
+                        disease: plantDisease,
+                        remedy: remedy,
+                      );
+                      setState(() {
+                        isLoading = false;
+                      });
+                      print(result);
+
+                      Utils.successSnackBar(
+                          'THE CROP ANALYSIS REPORT HAS BEEN GENERATED AND SAVED TO DOWNLOADS');
+                    },
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(5.0),
+                  ),
+                  GestureDetector(
+                    child: Text("Send Alert"),
+                    onTap: () async {
+                      await sendEmail(plantDisease, cropName, remedy);
+                      Navigator.pop(context);
+                      Utils.successSnackBar(
+                          'THE ALERT HAS BEEN SENT TO EVERYONE');
                     },
                   )
                 ],
@@ -83,46 +125,29 @@ class _DiseaseState extends State<Disease> {
 
   final plantName = {
     "Healthy_Tomato": "Tomato",
-    "Tomato_Early_Blight": "Tomato",
     "Tomato_Late_Blight": "Tomato",
-    "Tomato_Mosaic_Virus": "Tomato",
-    "Tomato_Yellow_Leaf_Curl": "Tomato",
-    "Healthy_Potato": "Potato",
-    "Potato_Early_Blight": "Potato",
-    "Potato_Late_Blight": "Potato",
+    "Tomato_mosaic_virus": "Tomato",
     "Healthy_Bell_Pepper": "Pepper",
-    "Bell_Pepper_Bacterial_Spot": "Pepper",
+    "Bell_Pepper_Bacterial_spot": "Pepper",
     "Healthy_Maize": "Maize",
-    "Maize_Cercospora_leaf_spot _and_Gray_leaf_spot": "Maize",
-    "Maize_Common_rust": "Maize",
-    "Apple_Scab": "Apple",
+    "Maize_Cercospora_leaf_spot_and_Gray_leaf_spot": "Maize",
+    "Maize_common_rust": "Maize"
   };
 
   final disease = {
     "Healthy_Tomato": "This tomato leaf/plant is healthy.",
-    "Tomato_Early_Blight":
-        "Tomato Early Blight is a fungal disease that causes dark spots on lower leaves, which spread and lead to leaf withering. The cure involves removing infected leaves and applying fungicides. To prevent it, ensure proper plant spacing, use mulch, and avoid overhead watering. Fungicides such as chlorothalonil, mancozeb, or copper-based fungicides like copper hydroxide can be effective in controlling early blight on tomatoes.",
     "Tomato_Late_Blight":
         "Tomato Late Blight is a devastating fungal disease that causes water-soaked lesions on leaves, stems, and fruits. It thrives in cool, moist conditions. Fungicides can help control the disease, but prevention through crop rotation, good airflow, and resistant tomato varieties is crucial. Fungicides containing active ingredients like chlorothalonil, mancozeb, or metalaxyl are commonly used to manage late blight in tomatoes.",
-    "Tomato_Mosaic_Virus":
+    "Tomato_mosaic_virus":
         "Tomato Mosaic Virus causes mottled leaves, stunted growth, and distorted fruits. There is no cure for this viral disease, so prevention is key. It involves using virus-free seeds, practicing strict sanitation, and controlling aphids, which can transmit the virus. There is no specific fungicide treatment for viral diseases like tomato mosaic virus. Prevention through the use of virus-free seeds, strict sanitation practices, and controlling the vectors, such as aphids, is crucial.",
-    "Tomato_Yellow_Leaf_Curl":
-        "Tomato Yellow Leaf Curl is caused by a virus transmitted by whiteflies. Infected plants show curling leaves, yellowing, and reduced yield. There is no cure, so prevention is essential. Use resistant tomato varieties, employ whitefly control measures, and remove infected plants to prevent its spread. ",
-    "Healthy_Potato": "This potato leaf/plant is healthy",
-    "Potato_Early_Blight":
-        "Potato Early Blight is a fungal disease characterized by brown lesions on lower leaves, which eventually spread to the entire plant. The disease can be controlled by removing infected foliage and applying fungicides. Prevention includes crop rotation, proper spacing, and avoiding overhead watering. Fungicides such as chlorothalonil, mancozeb, or copper-based fungicides can be effective in controlling early blight on potatoes.",
-    "Potato_Late_Blight":
-        "Potato Late Blight is a devastating fungal disease that affects both foliage and tubers, causing dark lesions and rot. It spreads rapidly in moist conditions. Control measures include applying fungicides and removing infected plants. Preventative measures involve planting resistant varieties, maintaining proper spacing, and practicing good airflow. Fungicides like chlorothalonil, mancozeb, or metalaxyl are commonly used to manage late blight in potatoes.",
     "Healthy_Bell_Pepper": "This pepper leaf/plant is healthy",
-    "Bell_Pepper_Bacterial_Spot":
+    "Bell_Pepper_Bacterial_spot":
         "Bell Pepper Bacterial Spot causes dark, raised spots on leaves and fruits. Infected fruits may also develop lesions. Copper-based sprays can be used to control the disease. Preventative measures include planting disease-resistant varieties, practicing crop rotation, and avoiding overhead watering. ",
     "Healthy_Maize": "This maize leaf/plant is healthy",
-    "Maize_Cercospora_leaf_spot _and_Gray_leaf_spot":
+    "Maize_Cercospora_leaf_spot_and_Gray_leaf_spot":
         "Maize Cercospora Leaf Spot and Gray Leaf Spot are fungal diseases that cause circular lesions on maize leaves, which turn brown or gray. Fungicides can be used to manage the diseases, and cultural practices like crop rotation and residue management help prevent their occurrence. Fungicides containing active ingredients such as azoxystrobin, pyraclostrobin, or propiconazole can help manage cercospora leaf spot and gray leaf spot in maize.",
-    "Maize_Common_rust":
-        "Maize Common Rust is a fungal disease characterized by orange or rust-colored pustules on leaves. Fungicides can be applied to control the disease. Planting resistant varieties and practicing crop rotation can help prevent the disease. Fungicides like triazoles (e.g., tebuconazole) or strobilurins (e.g., azoxystrobin) are commonly used to control common rust in maize.",
-    "Apple_Scab":
-        "Apple Scab is a fungal disease that affects apple trees, causing dark, scaly lesions on leaves, fruit, and twigs. Fungicides can be applied to manage the disease, but prevention is crucial. Implementing cultural practices such as pruning to improve airflow, removing infected debris, and planting resistant varieties can help prevent the spread of Apple Scab. Additionally, applying preventive fungicides early in the growing season can be effective in reducing the severity of the disease. Fungicides containing active ingredients such as myclobutanil, captan, or mancozeb are commonly used to manage apple scab in apple trees. Specific fungicide recommendations may vary depending on regional guidelines and resistance management strategies.",
+    "Maize_common_rust":
+        "Maize Common Rust is a fungal disease characterized by orange or rust-colored pustules on leaves. Fungicides can be applied to control the disease. Planting resistant varieties and practicing crop rotation can help prevent the disease. Fungicides like triazoles (e.g., tebuconazole) or strobilurins (e.g., azoxystrobin) are commonly used to control common rust in maize."
   };
 
   @override
@@ -174,61 +199,67 @@ class _DiseaseState extends State<Disease> {
   var remedy;
   var cropName;
 
-  void _settingModalBottomSheet(context) {
-    showModalBottomSheet(
+  Future _showDialog2(BuildContext context) async {
+    return showDialog(
         context: context,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(25.0),
-          ),
-        ),
-        builder: (BuildContext bc) {
-          return Wrap(
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.only(top: 3.h),
-                child: ListTile(
-                  leading: const Icon(
-                    Icons.edit_document,
-                    color: themeColor,
-                  ),
-                  title: const Text('Make PDF Report'),
-                  onTap: () async {
-                    setState(() {
-                      isLoading = true;
-                    });
-                    bool result = await makeReport(
-                      plant: cropName,
-                      disease: plantDisease,
-                      remedy: remedy,
-                    );
-                    setState(() {
-                      isLoading = false;
-                    });
-                    print(result);
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Choose an option"),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  GestureDetector(
+                    child: Text("Generate PDF Report"),
+                    onTap: () async {
+                      setState(() {
+                        isLoading = true;
+                      });
+                      bool result = await makeReport(
+                        plant: cropName,
+                        disease: plantDisease,
+                        remedy: remedy,
+                      );
+                      setState(() {
+                        isLoading = false;
+                      });
+                      print(result);
 
-                    Utils.successSnackBar(
-                        'THE CROP ANALYSIS REPORT HAS BEEN GENERATED AND SAVED TO DOWNLOADS');
-                  },
-                ),
+                      Utils.successSnackBar(
+                          'THE CROP ANALYSIS REPORT HAS BEEN GENERATED AND SAVED TO DOWNLOADS');
+                    },
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                  ),
+                  GestureDetector(
+                    child: Text("Send Alert"),
+                    onTap: () async {
+                      await sendEmail(plantDisease, cropName, remedy);
+                      Utils.successSnackBar(
+                          'THE ALERT HAS BEEN SENT TO EVERYONE');
+                    },
+                  )
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8.0),
-                child: ListTile(
-                  leading: const Icon(Icons.warning_amber_rounded,
-                      color: themeColor),
-                  title: const Text('Alert Other Farmers'),
-                  onTap: () async {
-                    // await sendAlerts(
-                    //     plant: widget.plant, disease: widget.disease);
-                    Utils.successSnackBar(
-                        'THE ALERT HAS BEEN SENT TO EVERYONE');
-                  },
-                ),
-              ),
-            ],
+            ),
           );
         });
+  }
+
+  Future<void> insertDiseaseData(
+      var diseaseName, var plantName, var diseaseSolution) async {
+    var _id = M.ObjectId();
+    var timestamp = DateTime.now();
+    final data = PlantDisease(
+        id: _id,
+        name: diseaseName,
+        plant: plantName,
+        solution: diseaseSolution,
+        user: user.email!,
+        timestamp: timestamp
+        );
+
+    var result = await MongoDatabase.insertDiseaseData(data);
   }
 
   @override
@@ -248,12 +279,13 @@ class _DiseaseState extends State<Disease> {
                 style: TextStyle(fontWeight: FontWeight.w600),
               ),
             )
-          : Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: GestureDetector(
-                onTap: () {
-                  _settingModalBottomSheet;
-                },
+          : GestureDetector(
+              onTap: () {
+                _showDialog2;
+                print("Tap event detected");
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
                 child: Image.file(
                   _image!,
                   height: MediaQuery.of(context).size.height / 2.5,
@@ -276,8 +308,10 @@ class _DiseaseState extends State<Disease> {
                 plantDisease = diseaseName;
                 remedy = disease[diseaseName];
                 cropName = plantName[diseaseName];
+                insertDiseaseData(plantDisease, cropName, remedy);
                 return Text(
                   "${res["label"]}",
+                  textAlign: TextAlign.left,
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 20.0,

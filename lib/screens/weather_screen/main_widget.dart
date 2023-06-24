@@ -12,6 +12,9 @@ import 'package:sizer/sizer.dart';
 import '../../constants.dart';
 import 'humidity_info.dart';
 import 'package:mongo_dart/mongo_dart.dart' as M;
+import 'package:firebase_auth/firebase_auth.dart';
+
+final user = FirebaseAuth.instance.currentUser!;
 
 class MainWidget extends StatefulWidget {
   final temp;
@@ -38,10 +41,9 @@ class _MainWidgetState extends State<MainWidget> {
   @override
   void initState() {
     super.initState();
-    updateFarmerData(
+    insertWeatherData(
         widget.temp, widget.currently, widget.humidity, widget.windSpeed);
-    // insertWeatherData(
-    //     widget.temp, widget.currently, widget.humidity, widget.windSpeed);
+    // MongoDatabase.deleteDocuments();
   }
 
   @override
@@ -243,10 +245,9 @@ class _MainWidgetState extends State<MainWidget> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => const WeatherPage()));
-                updateFarmerData(widget.temp, widget.currently, widget.humidity,
-                    widget.windSpeed);
-                // insertWeatherData(widget.temp, widget.currently,
-                //     widget.humidity, widget.windSpeed);
+                MongoDatabase.deleteDocuments();
+                insertWeatherData(widget.temp, widget.currently,
+                    widget.humidity, widget.windSpeed);
               },
               child: Text(
                 'Refresh',
@@ -263,41 +264,18 @@ class _MainWidgetState extends State<MainWidget> {
 
   Future<void> insertWeatherData(
       var myTemp, var myCurrently, var myHumidity, var myWindSpeed) async {
-    var _id = 'weatherData';
+    var _id = M.ObjectId().toHexString();;
+    var timestamp = DateTime.now();
     final data = Weather(
         id: _id,
         temperature: myTemp,
         weather: myCurrently,
         humidity: myHumidity,
-        windSpeed: myWindSpeed);
+        windSpeed: myWindSpeed,
+        user: user.email!,
+        timestamp: timestamp
+        );
 
     var result = await MongoDatabase.insertWeatherData(data);
   }
-
-  Future<void> updateFarmerData(
-      var myTemp, var myCurrently, var myHumidity, var myWindSpeed) async {
-    final weatherID = 'weatherID';
-    final updateData = Weather(
-      id: weatherID,
-      temperature: myTemp,
-      weather: myCurrently,
-      humidity: myHumidity,
-      windSpeed: myWindSpeed,
-    );
-
-    await MongoDatabase.updateWeatherData(updateData);
-  }
-
-  // Future<void> insertFarmerData(
-  //     var myTemp, var myCurrently, var myHumidity, var myWindSpeed) async {
-  //   var _id = M.ObjectId();
-  //   final data = Weather(
-  //       id: _id,
-  //       temperature: myTemp,
-  //       weather: myCurrently,
-  //       humidity: myHumidity,
-  //       windSpeed: myWindSpeed);
-
-  //   var result = await MongoDatabase.insertWeatherData(data);
-  // }
 }

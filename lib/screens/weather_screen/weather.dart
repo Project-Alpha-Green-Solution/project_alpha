@@ -142,6 +142,7 @@ class _WeatherPageState extends State<WeatherPage> {
         appBar: AppBar(
           centerTitle: true,
           elevation: 0,
+          backgroundColor: Colors.white,
           title: Text(
             'Weather',
             style: TextStyle(fontSize: 17.sp, color: themeColor),
