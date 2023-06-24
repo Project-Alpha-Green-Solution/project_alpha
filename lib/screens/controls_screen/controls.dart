@@ -25,9 +25,6 @@ class _ControlsState extends State<Controls> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          title: Text(""),
-        ),
         body: FutureBuilder(
         future: FlutterBluetoothSerial.instance.requestEnable(),
         builder: (BuildContext context, future) {
@@ -60,6 +57,7 @@ class Home extends StatelessWidget {
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
         centerTitle: true,
         elevation: 0,
         title: Text(

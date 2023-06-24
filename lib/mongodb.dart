@@ -19,42 +19,22 @@ class MongoDatabase {
   }
 
   //Get farmer's name from database
-static Future<Map<String, dynamic>?> getFarmerName() async {
-  final data = await collection.findOne(where.eq('email', user.email!));
-  return data;
-}
-
-
-
-  static Future<String?> fetchFarmerNameByEmail() async {
-  final query = where.eq('email', user.email);
-
-  final Map<String, dynamic>? result =
-      await collection.findOne(query, fields: {'farmerName': 1, '_id': 0});
-
-  await db.close();
-
-  if (result != null) {
-    return result['farmerName'] as String?;
+  static Future<Map<String, dynamic>?> getFarmerName() async {
+    final data = await collection.findOne(where.eq('email', user.email!));
+    return data;
   }
 
-  return null;
-}
+  static Future<void> deleteDocuments() async {
+    // Define your query to select the documents to delete
+    final query = where.eq('weather', 'Clouds');
 
+    // Perform the delete operation
+    final result = await collection.deleteMany(query);
 
-  //update weather data
-static Future<void> updateWeatherData(Weather data) async {
-  final query = where.eq('_id', 'weatherID');
-  final update = modify
-    ..set('temperature', data.temperature)
-    ..set('weather', data.weather)
-    ..set('humidity', data.humidity)
-    ..set('windSpeed', data.windSpeed);
+    print('Deleted ${result.deletedCount} documents.');
 
-  final response = await collection.update(query, update);
-  inspect(response);
-}
-
+    await db.close();
+  }
 
   //Insert farmer's details into the database
   static Future<String> insertFarmerData(Farmer data) async {
@@ -84,4 +64,33 @@ static Future<void> updateWeatherData(Weather data) async {
       return e.toString();
     }
   }
+
+  static Future<String> insertDiseaseData(PlantDisease data) async {
+    try {
+      var result = await collection.insertOne(data.toJson());
+      if (result.isSuccess) {
+        return "Disease data inserted successfully";
+      } else {
+        return "Error, couldn't insert disease data.";
+      }
+    } catch (e) {
+      print(e.toString());
+      return e.toString();
+    }
+  }
+
+// Function to fetch data from MongoDB
+static Future<List<Map<String, dynamic>>> fetchLastInsertedData() async {
+  final cursor = collection.find(
+    where.eq('email', user.email!), // Add the where clause here
+    sort: {r'$natural': -1},
+    limit: 1,
+    fields: {'name': 1, 'plant': 1, 'solution': 1},
+  );
+
+  final result = await cursor.toList();
+  return result;
 }
+
+}
+

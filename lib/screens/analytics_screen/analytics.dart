@@ -19,6 +19,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
         centerTitle: true,
         elevation: 0,
         title: Text(
@@ -72,19 +73,12 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                           children: [
                             const Icon(Icons.circle, color: Colors.red, size: 15,),
                             Text(
-                          ' Disease Status: ',
+                          ' Disease Status ',
                           textAlign: TextAlign.left,
                           style: TextStyle(
                               fontSize: 13.sp,
                               color: Colors.black,
                               fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          'None',
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                              fontSize: 13.sp,
-                              color: Colors.black,),
                         ),
                           ],
                         ),
@@ -95,19 +89,12 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                           children: [
                             const Icon(Icons.circle, color: Colors.brown, size: 15,),
                             Text(
-                          ' Soil Nutrient: ',
+                          ' Soil Nutrient ',
                           textAlign: TextAlign.left,
                           style: TextStyle(
                               fontSize: 13.sp,
                               color: Colors.black,
                               fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          'Healthy',
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                              fontSize: 13.sp,
-                              color: Colors.black,),
                         ),
                           ],
                         ),
@@ -118,19 +105,12 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                           children: [
                             const Icon(Icons.circle, color: Colors.blue, size: 15,),
                             Text(
-                          ' Soil Moisture: ',
+                          ' Soil Moisture',
                           textAlign: TextAlign.left,
                           style: TextStyle(
                               fontSize: 13.sp,
                               color: Colors.black,
                               fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          'Normal',
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                              fontSize: 13.sp,
-                              color: Colors.black,),
                         ),
                           ],
                         ),
@@ -164,7 +144,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                   child: Column(
                     children: [
                       Text(
-                        'Historical Analysis',
+                        'Past Analysis',
                         style: TextStyle(
                             fontSize: 16.sp,
                             color: themeColor,
@@ -186,6 +166,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                           style: TextStyle(
                               fontSize: 13.sp,
                               color: Colors.black,
+                              fontWeight: FontWeight.bold
                               ),
                         ),
                           ],
@@ -202,6 +183,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                           style: TextStyle(
                               fontSize: 13.sp,
                               color: Colors.black,
+                              fontWeight: FontWeight.bold
                               ),
                         ),
                           ],
@@ -218,6 +200,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                           style: TextStyle(
                               fontSize: 13.sp,
                               color: Colors.black,
+                              fontWeight: FontWeight.bold
                               ),
                         ),
                           ],
@@ -270,7 +253,8 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                         textAlign: TextAlign.left,
                         style: TextStyle(
                             fontSize: 10.3.sp,
-                            color: Colors.black,),
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500),
                       ),
                     ],
                   ),

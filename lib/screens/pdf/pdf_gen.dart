@@ -16,21 +16,23 @@ final myUser = FirebaseAuth.instance.currentUser!;
 
 String? farmerName;
 
-var farmer = MongoDatabase.fetchFarmerNameByEmail().then((String? name) {
-  farmerName = name;
-  if (farmerName != null) {
-    // Use the farmer name as needed
-    print(farmerName);
-    // Use the farmerName variable in any subsequent code
-    // ...
-  } else {
-    print('No farmer found with the specified email.');
-  }
-}).catchError((e) {
-  print('Error fetching farmer: $e');
-});
+var user = MongoDatabase.getFarmerName();
 
-var user = farmerName;
+// var farmer = MongoDatabase.fetchFarmerNameByEmail().then((String? name) {
+//   farmerName = name;
+//   if (farmerName != null) {
+//     // Use the farmer name as needed
+//     print(farmerName);
+//     // Use the farmerName variable in any subsequent code
+//     // ...
+//   } else {
+//     print('No farmer found with the specified email.');
+//   }
+// }).catchError((e) {
+//   print('Error fetching farmer: $e');
+// });
+
+// var user = farmerName;
 
 Future<Uint8List> getImageFileFromAssets(String path) async {
   final byteData = await rootBundle.load('assets/$path');

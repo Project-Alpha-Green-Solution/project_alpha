@@ -38,6 +38,9 @@ class _ControlsPageState extends State<ControlsPage> {
       body: Center(
         child: Column(
           children: [
+            SizedBox(
+              height: 5.h,
+            ),
             Stack(children: [
               Container(
                 width: 225,

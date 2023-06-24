@@ -1,20 +1,14 @@
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:projectalpha/bottomNav.dart';
 import 'package:projectalpha/screens/auth_screens/auth_page.dart';
-import 'package:projectalpha/screens/auth_screens/login_page.dart';
 import 'package:projectalpha/screens/auth_screens/utils.dart';
-import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-import 'constants.dart';
 import 'mongodb.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
