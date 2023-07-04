@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:hive/hive.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:projectalpha/constants.dart';
 import 'package:projectalpha/screens/analytics_screen/analytics.dart';
 import 'package:projectalpha/screens/home_screen/disease.dart';
@@ -10,6 +6,8 @@ import 'package:projectalpha/screens/weather_screen/weather.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../audio_manager.dart';
+import '../../provider/language_provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -19,8 +17,52 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  String language = '';
+  bool speak = false;
+  bool audioPlayed = false;
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   // if (speak) {
+  //   //   AudioManager.playAudio('audio/${language}/HomeScreen.wav');
+  //   // }
+  // }
+
+  @override
+  void dispose() {
+    AudioManager.stopAudio();
+    super.dispose();
+  }
+
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   final languageProvider = Provider.of<LanguageProvider>(context);
+  //   final selectedLanguage = languageProvider.selectedLanguage;
+  //   final audioTranslate = languageProvider.translateAudio;
+  //   setState(() {
+  //     speak = audioTranslate;
+  //     language = selectedLanguage;
+  //   });
+  //   if (speak) {
+  //     AudioManager.playAudio('audio/$language/HomeScreen.wav');
+  //   }
+  // }
+
   @override
   Widget build(BuildContext context) {
+    final languageProvider = Provider.of<LanguageProvider>(context);
+    final selectedLanguage = languageProvider.selectedLanguage;
+    final audioTranslate = languageProvider.translateAudio;
+    speak = audioTranslate;
+    language = selectedLanguage;
+
+    // Check if the audio has not been played yet and audioTranslate is true
+    if (speak) {
+      AudioManager.playAudio('audio/$language/HomeScreen.wav');
+      audioPlayed = true; // Set the flag to true to indicate that audio has been played
+    }
 
     return Scaffold(
       backgroundColor: const Color.fromRGBO(241, 253, 244, 1),
@@ -40,8 +82,7 @@ class _HomePageState extends State<HomePage> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => Disease()),
+                  MaterialPageRoute(builder: (context) => Disease()),
                 );
               },
               child: Container(
