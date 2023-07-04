@@ -80,17 +80,40 @@ class MongoDatabase {
   }
 
 // Function to fetch data from MongoDB
-static Future<List<Map<String, dynamic>>> fetchLastInsertedData() async {
-  final cursor = collection.find(
-    where.eq('email', user.email!), // Add the where clause here
-    sort: {r'$natural': -1},
-    limit: 1,
-    fields: {'name': 1, 'plant': 1, 'solution': 1},
-  );
+  static Future<List<Map<String, dynamic>>> fetchLastInsertedData() async {
+    final cursor = collection.find(
+      where.eq('user', user.email!), // Add the where clause here
+      sort: {r'$natural': -1},
+      limit: 1,
+      fields: {'name': 1, 'plant': 1, 'solution': 1},
+    );
 
-  final result = await cursor.toList();
-  return result;
+    final result = await cursor.toList();
+    return result;
+  }
+
+//function to fetch recent disease
+  static Future<Map<String, dynamic>?> getPlantDiseaseData() async {
+    final data = await collection.findOne(
+      where.eq('user', user.email!),
+    );
+    return data;
+  }
+
+//function to fetch recent disease
+  static Future<Map<String, dynamic>?> getWeatherData() async {
+    final data = await collection.findOne(
+      where.eq('weather', {'\$exists': true}).eq('user', user.email as String),
+    );
+    return data;
+  }
+
+//funciton to fetch past diseases
+  static Future<Map<String, dynamic>?> getPlantDiseases() async {
+    final List<Map<String, dynamic>> data = await collection.find(
+      where.eq('name', {'\$exists': true}).eq('user', user.email as String),
+    );
+    // print(data);
+    // return data;
+  }
 }
-
-}
-

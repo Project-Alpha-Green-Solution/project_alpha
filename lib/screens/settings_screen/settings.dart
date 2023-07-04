@@ -2,10 +2,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:projectalpha/mongo_schema/schema.dart';
 import 'package:projectalpha/mongodb.dart';
+import 'package:projectalpha/screens/settings_screen/audio_translation.dart';
 import 'package:projectalpha/screens/settings_screen/robot_manual.dart';
+import 'package:projectalpha/screens/settings_screen/text_translation.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../audio_manager.dart';
 import '../../constants.dart';
+import '../../provider/language_provider.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -15,8 +20,54 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+  String language = '';
+  bool speak = false;
+  bool audioPlayed = false;
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   // if (speak) {
+  //   //   AudioManager.playAudio('audio/${language}/SettingsScreen.wav');
+  //   // }
+  // }
+
+  @override
+  void dispose() {
+    AudioManager.stopAudio();
+    super.dispose();
+  }
+
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   final languageProvider = Provider.of<LanguageProvider>(context);
+  //   final selectedLanguage = languageProvider.selectedLanguage;
+  //   final audioTranslate = languageProvider.translateAudio;
+  //   setState(() {
+  //     speak = audioTranslate;
+  //     language = selectedLanguage;
+  //   });
+  //   if (speak) {
+  //     AudioManager.playAudio('audio/$language/SettingsScreen.wav');
+  //   }
+  // }
+
   @override
   Widget build(BuildContext context) {
+    final languageProvider = Provider.of<LanguageProvider>(context);
+    final selectedLanguage = languageProvider.selectedLanguage;
+    final audioTranslate = languageProvider.translateAudio;
+    speak = audioTranslate;
+    language = selectedLanguage;
+
+    // Check if the audio has not been played yet and audioTranslate is true
+    if (speak) {
+      AudioManager.playAudio('audio/$language/SettingsScreen.wav');
+      audioPlayed =
+          true; // Set the flag to true to indicate that audio has been played
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -61,6 +112,71 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
             ListTile(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const TextTranslation()),
+                );
+              },
+              leading: Icon(Icons.menu_sharp, size: 30.sp, color: themeColor),
+              title: Text(
+                'Text Language Translation',
+                style: TextStyle(
+                  fontSize: 15.sp,
+                  color: Colors.black,
+                ),
+              ),
+              subtitle: const Text(
+                'Translate text from English to other local dialects.',
+              ),
+              trailing:
+                  Icon(Icons.chevron_right, size: 25.sp, color: themeColor),
+            ),
+            ListTile(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const AudioTranslation()),
+                );
+              },
+              leading: Icon(Icons.menu_sharp, size: 30.sp, color: themeColor),
+              title: Text(
+                'Audio Language Translation',
+                style: TextStyle(
+                  fontSize: 15.sp,
+                  color: Colors.black,
+                ),
+              ),
+              subtitle: const Text(
+                'Get audio translations for some various local dialects',
+              ),
+              trailing:
+                  Icon(Icons.chevron_right, size: 25.sp, color: themeColor),
+            ),
+            ListTile(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ManualPage()),
+                );
+              },
+              leading: Icon(Icons.menu_sharp, size: 30.sp, color: themeColor),
+              title: Text(
+                'Robot Manual',
+                style: TextStyle(
+                  fontSize: 15.sp,
+                  color: Colors.black,
+                ),
+              ),
+              subtitle: const Text(
+                'How to use robot.',
+              ),
+              trailing:
+                  Icon(Icons.chevron_right, size: 25.sp, color: themeColor),
+            ),
+            ListTile(
               leading: Icon(Icons.settings, size: 30.sp, color: themeColor),
               title: Text(
                 'AgroGuard',
@@ -85,27 +201,6 @@ class _SettingsPageState extends State<SettingsPage> {
               subtitle: const Text(
                 'Version',
               ),
-            ),
-            ListTile(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const ManualPage()),
-                );
-              },
-              leading: Icon(Icons.menu_sharp, size: 30.sp, color: themeColor),
-              title: Text(
-                'Robot Manual',
-                style: TextStyle(
-                  fontSize: 15.sp,
-                  color: Colors.black,
-                ),
-              ),
-              subtitle: const Text(
-                'How to use robot.',
-              ),
-              trailing:
-                  Icon(Icons.chevron_right, size: 25.sp, color: themeColor),
             ),
             ListTile(
               onTap: () {

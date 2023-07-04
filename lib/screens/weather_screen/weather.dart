@@ -4,11 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:projectalpha/screens/weather_screen/main_widget.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import '../../audio_manager.dart';
 import '../../constants.dart';
+import '../../provider/language_provider.dart';
 
 var lat = 0.00;
 var lon = 0.00;
@@ -129,15 +132,55 @@ class _WeatherPageState extends State<WeatherPage> {
     });
   }
 
+  String language = '';
+  bool speak = false;
+  bool audioPlayed = false;
+
   @override
   void initState() {
     super.initState();
     futureWeather = fetchWeather();
     _getCurrentPosition();
+    // if (speak) {
+    //   AudioManager.playAudio('audio/${language}/WeatherScreen.wav');
+    // }
   }
 
   @override
+  void dispose() {
+    AudioManager.stopAudio();
+    super.dispose();
+  }
+
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   final languageProvider = Provider.of<LanguageProvider>(context);
+  //   final selectedLanguage = languageProvider.selectedLanguage;
+  //   final audioTranslate = languageProvider.translateAudio;
+  //   setState(() {
+  //     speak = audioTranslate;
+  //     language = selectedLanguage;
+  //   });
+  //   if (speak) {
+  //     AudioManager.playAudio('audio/$language/WeatherScreen.wav');
+  //   }
+  // }
+
+  @override
   Widget build(BuildContext context) {
+    final languageProvider = Provider.of<LanguageProvider>(context);
+    final selectedLanguage = languageProvider.selectedLanguage;
+    final audioTranslate = languageProvider.translateAudio;
+    speak = audioTranslate;
+    language = selectedLanguage;
+
+    // Check if the audio has not been played yet and audioTranslate is true
+    if (speak) {
+      AudioManager.playAudio('audio/$language/WeatherScreen.wav');
+      audioPlayed = true; // Set the flag to true to indicate that audio has been played
+    }
+
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
