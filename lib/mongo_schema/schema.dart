@@ -32,6 +32,7 @@ class Weather {
     required this.weather,
     required this.humidity,
     required this.windSpeed,
+    required this.status,
     required this.user,
     required this.timestamp,
   });
@@ -41,6 +42,7 @@ class Weather {
   var weather;
   var humidity;
   var windSpeed;
+  var status;
   var user;
   var timestamp;
 
@@ -50,6 +52,7 @@ class Weather {
         weather = json['weather'],
         humidity = json['humidity'],
         windSpeed = json['windSpeed'],
+        status = json['status'],
         user = json['user'],
         timestamp = json['timestamp'];
 
@@ -60,6 +63,7 @@ class Weather {
       'weather': weather,
       'humidity': humidity,
       'windSpeed': windSpeed,
+      'status': status,
       'user': user,
       'timestamp': timestamp,
     };
@@ -73,21 +77,30 @@ class Soil {
   Soil({
     required this.id,
     required this.moisture,
-    required this.nutrient,
+    required this.nitrogen,
+    required this.phosphorus,
+    required this.potassium,
+    required this.status,
     required this.user,
     required this.timestamp,
   });
 
   ObjectId id;
   var moisture;
-  var nutrient;
+  var nitrogen;
+  var potassium;
+  var phosphorus;
+  var status;
   var user;
   var timestamp;
 
   Soil.fromJson(Map<String, dynamic>? json)
       : id = (json != null) ? json['_id'] : ObjectId(),
         moisture = json?['moisture'],
-        nutrient = json?['nutrient'],
+        nitrogen = json?['nitrogen'],
+        potassium = json?['potassium'],
+        phosphorus = json?['phosphorus'],
+        status = json?['status'],
         user = json?['user'],
         timestamp = json?['timestamp'];
 
@@ -95,13 +108,15 @@ class Soil {
     return {
       '_id': id,
       'moisture': moisture,
-      'nutrient': nutrient,
+      'nitrogen': nitrogen,
+      'potassium': potassium,
+      'phosphorus': phosphorus,
+      'status': status,
       'user': user,
       'timestamp': timestamp,
     };
   }
 }
-
 
 PlantDisease diseaseFromJson(String str) =>
     PlantDisease.fromJson(json.decode(str));
@@ -113,6 +128,7 @@ class PlantDisease {
     required this.name,
     required this.plant,
     required this.solution,
+    required this.status,
     required this.user,
     required this.timestamp,
   });
@@ -121,6 +137,7 @@ class PlantDisease {
   var name;
   var plant;
   var solution;
+  var status;
   var user;
   var timestamp;
 
@@ -129,6 +146,7 @@ class PlantDisease {
         name = json?['name'],
         plant = json?['plant'],
         solution = json?['solution'],
+        status = json?['status'],
         user = json?['user'],
         timestamp = json?['timestamp'];
 
@@ -138,6 +156,7 @@ class PlantDisease {
       'name': name,
       'plant': plant,
       'solution': solution,
+      'status': status,
       'user': user,
       'timestamp': timestamp,
     };

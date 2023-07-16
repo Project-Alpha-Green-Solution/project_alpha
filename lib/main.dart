@@ -5,7 +5,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:projectalpha/audio_manager.dart';
 import 'package:projectalpha/bottomNav.dart';
 import 'package:projectalpha/provider/language_provider.dart';
 import 'package:projectalpha/screens/auth_screens/auth_page.dart';
@@ -23,6 +22,8 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // final FirebaseMessaging _fcm = FirebaseMessaging.instance;
   // _fcm.subscribeToTopic("susya");
 }
+
+
 
 final navigatorKey = GlobalKey<NavigatorState>();
  
@@ -47,8 +48,6 @@ Future main() async {
     ),
   );
 }
-
-
 
 
 class MyApp extends StatelessWidget {

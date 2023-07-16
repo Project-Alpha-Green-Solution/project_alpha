@@ -54,36 +54,9 @@ class _HomeState extends State<Home> {
   String language = '';
   bool speak = false;
   bool audioPlayed = false;
+  bool isPaused = false;
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   // if (speak) {
-  //   //   AudioManager.playAudio('audio/${language}/ControlScreen.wav');
-  //   // }
-  // }
-
-  @override
-  void dispose() {
-    AudioManager.stopAudio();
-    super.dispose();
-  }
-
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  //   final languageProvider = Provider.of<LanguageProvider>(context);
-  //   final selectedLanguage = languageProvider.selectedLanguage;
-  //   final audioTranslate = languageProvider.translateAudio;
-  //   setState(() {
-  //     speak = audioTranslate;
-  //     language = selectedLanguage;
-  //   });
-  //   if (speak) {
-  //     AudioManager.playAudio('audio/$language/ControlScreen.wav');
-  //   }
-  // }
-
+  
   @override
   Widget build(BuildContext context) {
     final languageProvider = Provider.of<LanguageProvider>(context);
@@ -108,6 +81,23 @@ class _HomeState extends State<Home> {
           'Bluetooth Connection',
           style: TextStyle(fontSize: 17.sp, color: themeColor),
         ),
+        actions: [
+          if (speak)
+            IconButton(
+              icon: Icon(isPaused ? Icons.pause_sharp : Icons.play_arrow, color: themeColor, size: 20),
+              onPressed: () {
+                setState(() {
+                  isPaused = !isPaused;
+                });
+                if (isPaused) {
+                  AudioManager.pauseAudio();
+                } 
+                if(!isPaused){
+                  AudioManager.resumeAudio('audio/$language/ControlScreen.wav');
+                }
+              },
+            ),
+        ],
       ),
       body: SelectBondedDevicePage(
         onCahtPage: (device1) {

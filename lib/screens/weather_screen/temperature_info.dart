@@ -70,7 +70,7 @@ class _TemperatureInfoState extends State<TemperatureInfo> {
                 width: 90.w,
                 child: Text(
                   info,
-                  style: TextStyle(fontSize: 13.5.sp, color: Colors.black),
+                  style: TextStyle(fontSize: 17.sp, color: Colors.black),
                 ),
               )
             ],

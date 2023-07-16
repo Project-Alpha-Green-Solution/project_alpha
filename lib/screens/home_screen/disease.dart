@@ -6,6 +6,7 @@ import 'package:projectalpha/mongo_schema/schema.dart';
 import 'package:sizer/sizer.dart';
 import '../../constants.dart';
 import '../../mongodb.dart';
+import '../../sendSMS.dart';
 import '../../send_email.dart';
 import '../auth_screens/utils.dart';
 import '../pdf/pdf_gen.dart';
@@ -84,10 +85,10 @@ class _DiseaseState extends State<Disease> {
                   GestureDetector(
                     child: Text("Send Alert"),
                     onTap: () async {
-                      await sendEmail(plantDisease, cropName, remedy);
                       Navigator.pop(context);
                       Utils.successSnackBar(
                           'THE ALERT HAS BEEN SENT TO EVERYONE');
+                      await sendEmail(plantDisease, cropName, remedy);
                     },
                   )
                 ],
@@ -161,6 +162,7 @@ class _DiseaseState extends State<Disease> {
         _busy = false;
       });
     });
+    // sendSMS();
   }
 
   Future loadModel() async {
@@ -249,15 +251,16 @@ class _DiseaseState extends State<Disease> {
   Future<void> insertDiseaseData(
       var diseaseName, var plantName, var diseaseSolution) async {
     var _id = M.ObjectId();
+    var status = 'Last';
     var timestamp = DateTime.now();
     final data = PlantDisease(
         id: _id,
         name: diseaseName,
         plant: plantName,
         solution: diseaseSolution,
+        status: status,
         user: user.email!,
-        timestamp: timestamp
-        );
+        timestamp: timestamp);
 
     var result = await MongoDatabase.insertDiseaseData(data);
   }

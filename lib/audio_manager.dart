@@ -15,6 +15,20 @@ class AudioManager {
 
   static Future<void> stopAudio() async {
     await audioPlayer.stop();
-    // currentAudioPath = null;
   }
+
+  static Future<void> pauseAudio() async {
+    await audioPlayer.pause();
+  }
+
+  static Future<void> resumeAudio(String audioPath) async {
+    if (audioPlayer.state == PlayerState.completed) {
+      // If audio playback is complete, start playing again
+      await audioPlayer.play(AssetSource(audioPath));
+    } else {
+      // If audio is still playing, resume playback
+      await audioPlayer.resume();
+    }
+  }
+
 }

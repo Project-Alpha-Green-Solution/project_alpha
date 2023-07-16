@@ -83,11 +83,19 @@ class _HistoricalAnalysisState extends State<HistoricalAnalysis> {
                     : CircularProgressIndicator(), // Show a loading indicator if data is being fetched
               ),
             ] else ...[
-              Container(
-                height: 100,
-                width: 100,
-                color: Colors.green,
-              )
+              Center(
+                child: _dataList.isNotEmpty
+                    ? ListView.builder(
+                        itemCount: _dataList.length,
+                        itemBuilder: (context, index) {
+                          final item = _dataList[index];
+                          final diseaseName = PlantDisease.fromJson(
+                              item as Map<String, dynamic>);
+                          return getPastData(diseaseName);
+                        },
+                      )
+                    : CircularProgressIndicator(), // Show a loading indicator if data is being fetched
+              ),
             ],
           ],
         ),
