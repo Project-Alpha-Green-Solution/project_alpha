@@ -135,37 +135,14 @@ class _WeatherPageState extends State<WeatherPage> {
   String language = '';
   bool speak = false;
   bool audioPlayed = false;
+  bool isPaused = false;
 
   @override
   void initState() {
     super.initState();
     futureWeather = fetchWeather();
     _getCurrentPosition();
-    // if (speak) {
-    //   AudioManager.playAudio('audio/${language}/WeatherScreen.wav');
-    // }
   }
-
-  @override
-  void dispose() {
-    AudioManager.stopAudio();
-    super.dispose();
-  }
-
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  //   final languageProvider = Provider.of<LanguageProvider>(context);
-  //   final selectedLanguage = languageProvider.selectedLanguage;
-  //   final audioTranslate = languageProvider.translateAudio;
-  //   setState(() {
-  //     speak = audioTranslate;
-  //     language = selectedLanguage;
-  //   });
-  //   if (speak) {
-  //     AudioManager.playAudio('audio/$language/WeatherScreen.wav');
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -190,6 +167,23 @@ class _WeatherPageState extends State<WeatherPage> {
             'Weather',
             style: TextStyle(fontSize: 17.sp, color: themeColor),
           ),
+          actions: [
+          if (speak)
+            IconButton(
+              icon: Icon(isPaused ? Icons.pause_sharp : Icons.play_arrow, color: themeColor, size: 20),
+              onPressed: () {
+                setState(() {
+                  isPaused = !isPaused;
+                });
+                if (isPaused) {
+                  AudioManager.pauseAudio();
+                } 
+                if(!isPaused){
+                  AudioManager.resumeAudio('audio/$language/WeatherScreen.wav');
+                }
+              },
+            ),
+        ],
         ),
         body: FutureBuilder<WeatherInfo>(
           future: futureWeather,

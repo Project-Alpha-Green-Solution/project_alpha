@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-const themeColor = Color.fromRGBO(14, 235, 77, 1);
+const themeColor = Color.fromRGBO(15, 157, 88, 1);
 const lightbg = Color.fromRGBO(219, 252, 228, 1);
 
 class Palette {
@@ -21,7 +21,13 @@ class Palette {
   );
 }
 
-const MONGO_URL = "mongodb+srv://eyarko:%40password123@lawsonscluster.l1vqepq.mongodb.net/agroguard";
+const MONGO_URL =
+    "mongodb+srv://eyarko:%40password123@lawsonscluster.l1vqepq.mongodb.net/agroguard";
 
 const COLLECTION_NAME = "agroguard";
 
+const SOIL_COLLECTION = "soilData";
+
+const WEATHER_COLLECTION = "weatherData";
+
+const DISEASE_COLLECTION = "diseaseData";

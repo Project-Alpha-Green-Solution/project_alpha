@@ -39,6 +39,7 @@ class _AudioTranslationState extends State<AudioTranslation> {
               ),
               trailing: Switch(
                   value: translateAudio,
+                  activeColor: themeColor,
                   onChanged: (value) => languageProvider.AudioTranslate()),
             ),
             Text('Select Language:'),

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../constants.dart';
+import '../../sendSMS.dart';
+import '../auth_screens/utils.dart';
 
 class ControlsPage extends StatefulWidget {
   const ControlsPage(
@@ -214,6 +216,9 @@ class _ControlsPageState extends State<ControlsPage> {
                 GestureDetector(
                   onTap: () {
                     widget.sendMessage5();
+                    sendSMS();
+                    Utils.successSnackBar(
+                          'THE SYSTEM WILL START IRRIGATION SOON');
                   },
                   child: Container(
                     margin: EdgeInsets.only(top: 3.h),

@@ -51,10 +51,13 @@ class _GeneratedReportState extends State<GeneratedReport> {
   // print(response.body); // Print the response body
 
   setState(() {
+  if (response.body != null) {
     _responseModel = ResponseModel.fromJson(jsonDecode(response.body));
     responseTxt = _responseModel!.choices[0].text;
-    // print(responseTxt);
-  });
+    print(responseTxt);
+  }
+});
+
 }
 
 
@@ -81,7 +84,7 @@ class _GeneratedReportState extends State<GeneratedReport> {
               style: TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.w400,
-                fontSize: 16.sp,
+                fontSize: 18.sp,
               ),
             ),
           ),

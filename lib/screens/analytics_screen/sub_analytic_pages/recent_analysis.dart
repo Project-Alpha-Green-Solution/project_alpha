@@ -149,6 +149,7 @@ class _RecentAnalysisState extends State<RecentAnalysis> {
       title: Text(
         'Recent Disease Detected: ',
         style: TextStyle(
+          fontSize: 18,
           color: themeColor,
           fontWeight: FontWeight.w500,
         ),
@@ -156,6 +157,7 @@ class _RecentAnalysisState extends State<RecentAnalysis> {
       subtitle: Text(
         '${data.name}',
         style: TextStyle(
+          fontSize: 18,
           color: themeColor,
           fontWeight: FontWeight.w500,
         ),
@@ -168,6 +170,7 @@ class _RecentAnalysisState extends State<RecentAnalysis> {
       title: Text(
         'Plant Name: ',
         style: TextStyle(
+          fontSize: 18,
           color: themeColor,
           fontWeight: FontWeight.w500,
         ),
@@ -175,6 +178,7 @@ class _RecentAnalysisState extends State<RecentAnalysis> {
       subtitle: Text(
         '${data.plant}',
         style: TextStyle(
+          fontSize: 18,
           color: themeColor,
           fontWeight: FontWeight.w500,
         ),
@@ -187,6 +191,7 @@ class _RecentAnalysisState extends State<RecentAnalysis> {
       title: Text(
         'Disease Solution: ',
         style: TextStyle(
+          fontSize: 18,
           color: themeColor,
           fontWeight: FontWeight.w500,
         ),
@@ -194,6 +199,7 @@ class _RecentAnalysisState extends State<RecentAnalysis> {
       subtitle: Text(
         '${data.solution}',
         style: TextStyle(
+          fontSize: 18,
           color: themeColor,
           fontWeight: FontWeight.w500,
         ),

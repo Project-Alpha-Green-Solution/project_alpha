@@ -20,35 +20,7 @@ class _HomePageState extends State<HomePage> {
   String language = '';
   bool speak = false;
   bool audioPlayed = false;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   // if (speak) {
-  //   //   AudioManager.playAudio('audio/${language}/HomeScreen.wav');
-  //   // }
-  // }
-
-  @override
-  void dispose() {
-    AudioManager.stopAudio();
-    super.dispose();
-  }
-
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  //   final languageProvider = Provider.of<LanguageProvider>(context);
-  //   final selectedLanguage = languageProvider.selectedLanguage;
-  //   final audioTranslate = languageProvider.translateAudio;
-  //   setState(() {
-  //     speak = audioTranslate;
-  //     language = selectedLanguage;
-  //   });
-  //   if (speak) {
-  //     AudioManager.playAudio('audio/$language/HomeScreen.wav');
-  //   }
-  // }
+  bool isPaused = false;
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +33,8 @@ class _HomePageState extends State<HomePage> {
     // Check if the audio has not been played yet and audioTranslate is true
     if (speak) {
       AudioManager.playAudio('audio/$language/HomeScreen.wav');
-      audioPlayed = true; // Set the flag to true to indicate that audio has been played
+      audioPlayed =
+          true; // Set the flag to true to indicate that audio has been played
     }
 
     return Scaffold(
@@ -74,6 +47,23 @@ class _HomePageState extends State<HomePage> {
           'Home',
           style: TextStyle(fontSize: 17.sp, color: themeColor),
         ),
+        actions: [
+          if (speak)
+            IconButton(
+              icon: Icon(isPaused ? Icons.pause_sharp : Icons.play_arrow, color: themeColor, size: 20),
+              onPressed: () {
+                setState(() {
+                  isPaused = !isPaused;
+                });
+                if (isPaused) {
+                  AudioManager.pauseAudio();
+                } 
+                if(!isPaused){
+                  AudioManager.resumeAudio('audio/$language/HomeScreen.wav');
+                }
+              },
+            ),
+        ],
       ),
       body: Center(
         child: Column(

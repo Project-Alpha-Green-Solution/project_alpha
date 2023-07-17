@@ -23,20 +23,13 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
   String language = '';
   bool speak = false;
   bool audioPlayed = false;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   loadData();
-  //   // if (speak) {
-  //   //   AudioManager.playAudio('audio/${language}/AnalyticsScreen.wav');
-  //   // }
-  // }
+  bool isPaused = false;
 
   @override
-  void dispose() {
-    AudioManager.stopAudio();
-    super.dispose();
+  void initState() {
+    super.initState();
+    // MongoDatabase.deleteDocuments();
+    loadData();
   }
 
   Future<void> loadData() async {
@@ -44,10 +37,11 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
       Map<String, dynamic>? plantData =
           await MongoDatabase.getPlantDiseaseData();
       Map<String, dynamic>? weatherData = await MongoDatabase.getWeatherData();
-      if (plantData != null && weatherData != null) {
+      Map<String, dynamic>? soilData = await MongoDatabase.getRecentSoilData();
+      if (plantData != null && weatherData != null && soilData != null) {
         myRequest =
-            'For my agric IoT app, generate a comprehensive report per the data I gathered from the farm. The data might include the following. Plant, detected plant disease, weather readings and readings from the soil.  Your report should include the analysis you have made from the data provided and also possible solutions for problems identified from the data provided. For instance, you should provide a solution to the disease detected or even tell the farmer what to do in case the soil readings mean the farm is not doing well. You should also provide a weather forecast per the weather data provided. The data is as follows: Plant: ${plantData['plant']}, Detected disease name: ${plantData['name']}, Temperature: ${weatherData['temperature']}, Weather: ${weatherData['weather']}, Humidity: ${weatherData['humidity']}';
-        // print(myRequest);
+            'For my agric IoT app called AgroGuard, generate a comprehensive report per the data gathered from the farm. The data might include the following. Plant, detected plant disease, weather readings and readings from the soil.  Your report should include a short analysis you have made from the data provided and also possible solutions for problems identified from the data provided. For instance, you should provide a solution to the disease detected or even tell the farmer what to do in case the soil readings mean the farm is not doing well. You should also provide a weather forecast per the weather data provided whether it will rain or not in the next 24 hours. The data is as follows: Plant: ${plantData['plant']}, Disease: ${plantData['name']}, Temperature: ${weatherData['temperature']}, Weather: ${weatherData['weather']}, Humidity: ${weatherData['humidity']}. The soil readings are also as follows. Soil moisture(might be null): ${soilData['moisture']}, soil nitrogen content(might be null): ${soilData['nitrogen']}, soil phosphorus content(might be null): ${soilData['phosphorus']}, soil potassium content(might be null): ${soilData['potassium']}, Note that the soil nutrient content for each nutrient is mapped from 0-255 and the soil moisture comes in ranges; 1-175 means dry soil, 175-350 means little moisture, 350-525 means good moisture content, 525-700 means very wet soil, 700-876 means too wet. In order to save time, do not repeat the data gathered before producing your analysis.';
+        print(myRequest);
       } else {
         print("No data found");
       }
@@ -55,21 +49,6 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
       print("Error fetching data");
     }
   }
-
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  //   final languageProvider = Provider.of<LanguageProvider>(context);
-  //   final selectedLanguage = languageProvider.selectedLanguage;
-  //   final audioTranslate = languageProvider.translateAudio;
-  //   setState(() {
-  //     speak = audioTranslate;
-  //     language = selectedLanguage;
-  //   });
-  //   if (speak) {
-  //     AudioManager.playAudio('audio/$language/AnalyticsScreen.wav');
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +61,8 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
     // Check if the audio has not been played yet and audioTranslate is true
     if (speak) {
       AudioManager.playAudio('audio/$language/AnalyticsScreen.wav');
-      audioPlayed = true; // Set the flag to true to indicate that audio has been played
+      audioPlayed =
+          true; // Set the flag to true to indicate that audio has been played
     }
 
     return Scaffold(
@@ -94,6 +74,24 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
           'Analytics',
           style: TextStyle(fontSize: 17.sp, color: themeColor),
         ),
+        actions: [
+          if (speak)
+            IconButton(
+              icon: Icon(isPaused ? Icons.pause_sharp : Icons.play_arrow,
+                  color: themeColor, size: 20),
+              onPressed: () {
+                setState(() {
+                  isPaused = !isPaused;
+                });
+                if (isPaused) {
+                  AudioManager.pauseAudio();
+                }
+                if (!isPaused) {
+                  AudioManager.resumeAudio('audio/$language/HomeScreen.wav');
+                }
+              },
+            ),
+        ],
       ),
       body: SingleChildScrollView(
         physics: ScrollPhysics(),

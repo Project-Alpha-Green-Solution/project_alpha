@@ -43,7 +43,6 @@ class _MainWidgetState extends State<MainWidget> {
     super.initState();
     insertWeatherData(
         widget.temp, widget.currently, widget.humidity, widget.windSpeed);
-    // MongoDatabase.deleteDocuments();
   }
 
   @override
@@ -245,7 +244,6 @@ class _MainWidgetState extends State<MainWidget> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => const WeatherPage()));
-                MongoDatabase.deleteDocuments();
                 insertWeatherData(widget.temp, widget.currently,
                     widget.humidity, widget.windSpeed);
               },
@@ -264,14 +262,16 @@ class _MainWidgetState extends State<MainWidget> {
 
   Future<void> insertWeatherData(
       var myTemp, var myCurrently, var myHumidity, var myWindSpeed) async {
-    var _id = M.ObjectId().toHexString();;
+    var _id = M.ObjectId().toHexString();
     var timestamp = DateTime.now();
+    var status = 'Last';
     final data = Weather(
         id: _id,
         temperature: myTemp,
         weather: myCurrently,
         humidity: myHumidity,
         windSpeed: myWindSpeed,
+        status: status,
         user: user.email!,
         timestamp: timestamp
         );

@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:projectalpha/mongo_schema/schema.dart';
 import 'package:projectalpha/mongodb.dart';
 import 'package:projectalpha/screens/settings_screen/audio_translation.dart';
+import 'package:projectalpha/screens/settings_screen/ecommerce.dart';
 import 'package:projectalpha/screens/settings_screen/robot_manual.dart';
+import 'package:projectalpha/screens/settings_screen/smart_farming/education_platform.dart';
 import 'package:projectalpha/screens/settings_screen/text_translation.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -11,6 +13,7 @@ import 'package:sizer/sizer.dart';
 import '../../audio_manager.dart';
 import '../../constants.dart';
 import '../../provider/language_provider.dart';
+import 'camera_images/image_list.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -23,35 +26,7 @@ class _SettingsPageState extends State<SettingsPage> {
   String language = '';
   bool speak = false;
   bool audioPlayed = false;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   // if (speak) {
-  //   //   AudioManager.playAudio('audio/${language}/SettingsScreen.wav');
-  //   // }
-  // }
-
-  @override
-  void dispose() {
-    AudioManager.stopAudio();
-    super.dispose();
-  }
-
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  //   final languageProvider = Provider.of<LanguageProvider>(context);
-  //   final selectedLanguage = languageProvider.selectedLanguage;
-  //   final audioTranslate = languageProvider.translateAudio;
-  //   setState(() {
-  //     speak = audioTranslate;
-  //     language = selectedLanguage;
-  //   });
-  //   if (speak) {
-  //     AudioManager.playAudio('audio/$language/SettingsScreen.wav');
-  //   }
-  // }
+  bool isPaused = false;
 
   @override
   Widget build(BuildContext context) {
@@ -77,6 +52,25 @@ class _SettingsPageState extends State<SettingsPage> {
           'Settings',
           style: TextStyle(fontSize: 17.sp, color: themeColor),
         ),
+        actions: [
+          if (speak)
+            IconButton(
+              icon: Icon(isPaused ? Icons.pause_sharp : Icons.play_arrow,
+                  color: themeColor, size: 20),
+              onPressed: () {
+                setState(() {
+                  isPaused = !isPaused;
+                });
+                if (isPaused) {
+                  AudioManager.pauseAudio();
+                }
+                if (!isPaused) {
+                  AudioManager.resumeAudio(
+                      'audio/$language/SettingsScreen.wav');
+                }
+              },
+            ),
+        ],
       ),
       body: Center(
         child: Column(
@@ -116,32 +110,11 @@ class _SettingsPageState extends State<SettingsPage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const TextTranslation()),
-                );
-              },
-              leading: Icon(Icons.menu_sharp, size: 30.sp, color: themeColor),
-              title: Text(
-                'Text Language Translation',
-                style: TextStyle(
-                  fontSize: 15.sp,
-                  color: Colors.black,
-                ),
-              ),
-              subtitle: const Text(
-                'Translate text from English to other local dialects.',
-              ),
-              trailing:
-                  Icon(Icons.chevron_right, size: 25.sp, color: themeColor),
-            ),
-            ListTile(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
                       builder: (context) => const AudioTranslation()),
                 );
               },
-              leading: Icon(Icons.menu_sharp, size: 30.sp, color: themeColor),
+              leading:
+                  Icon(Icons.record_voice_over, size: 30.sp, color: themeColor),
               title: Text(
                 'Audio Language Translation',
                 style: TextStyle(
@@ -151,6 +124,27 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               subtitle: const Text(
                 'Get audio translations for some various local dialects',
+              ),
+              trailing:
+                  Icon(Icons.chevron_right, size: 25.sp, color: themeColor),
+            ),
+            ListTile(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ImageList()),
+                );
+              },
+              leading: Icon(Icons.image, size: 30.sp, color: themeColor),
+              title: Text(
+                'Camera Images',
+                style: TextStyle(
+                  fontSize: 15.sp,
+                  color: Colors.black,
+                ),
+              ),
+              subtitle: const Text(
+                'Access camera images',
               ),
               trailing:
                   Icon(Icons.chevron_right, size: 25.sp, color: themeColor),
@@ -172,6 +166,49 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               subtitle: const Text(
                 'How to use robot.',
+              ),
+              trailing:
+                  Icon(Icons.chevron_right, size: 25.sp, color: themeColor),
+            ),
+            ListTile(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Ecommerce()),
+                );
+              },
+              leading: Icon(Icons.shopping_bag, size: 30.sp, color: themeColor),
+              title: Text(
+                'Online Market',
+                style: TextStyle(
+                  fontSize: 15.sp,
+                  color: Colors.black,
+                ),
+              ),
+              subtitle: const Text(
+                'Buy and sell farm produce',
+              ),
+              trailing:
+                  Icon(Icons.chevron_right, size: 25.sp, color: themeColor),
+            ),
+            ListTile(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const EducationPlatform()),
+                );
+              },
+              leading: Icon(Icons.school, size: 30.sp, color: themeColor),
+              title: Text(
+                'Farmducation',
+                style: TextStyle(
+                  fontSize: 15.sp,
+                  color: Colors.black,
+                ),
+              ),
+              subtitle: const Text(
+                'Learn about smart farming',
               ),
               trailing:
                   Icon(Icons.chevron_right, size: 25.sp, color: themeColor),
@@ -231,3 +268,26 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 }
+
+// ListTile(
+//               onTap: () {
+//                 Navigator.push(
+//                   context,
+//                   MaterialPageRoute(
+//                       builder: (context) => const TextTranslation()),
+//                 );
+//               },
+//               leading: Icon(Icons.translate, size: 30.sp, color: themeColor),
+//               title: Text(
+//                 'Text Language Translation',
+//                 style: TextStyle(
+//                   fontSize: 15.sp,
+//                   color: Colors.black,
+//                 ),
+//               ),
+//               subtitle: const Text(
+//                 'Translate text from English to other local dialects.',
+//               ),
+//               trailing:
+//                   Icon(Icons.chevron_right, size: 25.sp, color: themeColor),
+//             ),

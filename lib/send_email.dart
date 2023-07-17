@@ -5,9 +5,9 @@ import 'package:mongo_dart/mongo_dart.dart';
 import 'constants.dart';
 
 Future sendEmail(String disease, String crop, String solution) async {
-  const serviceId = 'service_xdv4ifi';
-  const templateId = 'template_hartbbz';
-  const userId = 'UGnW8fyk_kfiKHFD2';
+  const serviceId = 'service_0f2yzj7';
+  const templateId = 'template_n8m48d8';
+  const userId = 'Xf0VzqOadUdRo5zmA';
   final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
 
   // Connect to MongoDB
@@ -43,7 +43,7 @@ Future sendEmail(String disease, String crop, String solution) async {
           }
         }));
 
-    print(response);
+    print(response.body);
   }
 
   // Close the database connection
